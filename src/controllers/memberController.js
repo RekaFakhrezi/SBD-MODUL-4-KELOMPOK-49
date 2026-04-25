@@ -11,6 +11,16 @@ export const MemberController = {
     }
   },
 
+  // Mendapatkan member berdasarkan id
+  async getMemberById(req, res) {
+    try {
+      const member = await MemberModel.getById(req.params.id);
+      res.json(member);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
   // Mendaftarkan anggota baru
   async registerMember(req, res) {
     try {
@@ -19,6 +29,29 @@ export const MemberController = {
         message: "Anggota berhasil didaftarkan!",
         data: newMember
       });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  },
+
+  // Update member
+  async updateMember(req, res) {
+    try {
+      const updatedMember = await MemberModel.update(
+        req.params.id,
+        req.body
+      );
+      res.json(updatedMember);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  },
+
+  // Hapus member
+  async deleteMember(req, res) {
+    try {
+      const result = await MemberModel.delete(req.params.id);
+      res.json(result);
     } catch (err) {
       res.status(400).json({ error: err.message });
     }

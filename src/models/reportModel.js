@@ -16,5 +16,21 @@ export const ReportModel = {
     `;
     const result = await pool.query(query);
     return result.rows;
+  },
+
+  async getStats() {
+    const books = await pool.query('SELECT COUNT(*) FROM books');
+    const authors = await pool.query('SELECT COUNT(*) FROM authors');
+    const categories = await pool.query('SELECT COUNT(*) FROM categories');
+    const loans = await pool.query(
+      "SELECT COUNT(*) FROM loans WHERE status = 'BORROWED'"
+    );
+
+    return {
+      total_books: books.rows[0].count,
+      total_authors: authors.rows[0].count,
+      total_categories: categories.rows[0].count,
+      borrowed_books: loans.rows[0].count
+    };
   }
 };
